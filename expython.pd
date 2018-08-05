@@ -1,0 +1,84 @@
+#!/usr/bin/python
+
+from Tkinter import *
+import pickle
+import os
+import subprocess
+import ttk
+
+root = Tk()
+root.geometry("600x400")
+root.title("Seller Page SC")
+
+def Enter():
+	# text_contents = text.get()
+	# listbox.insert(END, text_contents)
+	text.delete(0,END)
+	# os.system("dir") 
+	p = subprocess.Popen('scrapy crawl xmlparser', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	for line in p.stdout.readlines():
+		text.insert(0, line)
+		# print line,
+	retval = p.wait()
+
+# def Remove():
+# 	listbox.delete(ANCHOR)
+	
+
+def Save():
+	f = file("notes.db", "wb")	
+	# notes = listbox.get(0, END)
+	pickle.dump(notes, f)
+
+def ReturnInsert(event):
+	Enter()
+
+# def DeleteCurrent(event):
+	# Remove()
+
+def CopyToText(event):
+	text.delete(0, END)
+	# current_note = listbox.get(ANCHOR)
+	# text.insert(0, current_note)
+
+textframe = Frame(root)
+text = Entry(textframe)
+listframe = Frame(root)
+
+enter_button = Button(textframe, text="Enter", command = Enter)
+# remove_button = Button(textframe, text="Remove", command = Remove)
+# save_button = Button(textframe, text="Save", command = Save)
+
+# text = Entry(textframe)
+
+scrollbar = Scrollbar(listframe, orient=VERTICAL)
+# lis.tbox = Listbox(listframe, yscrollcommand=scrollbar.set, selectmode=EXTENDED)
+text = Listbox(textframe, yscrollcommand=scrollbar.set, selectmode=EXTENDED)
+scrollbar.configure(command=text.yview)
+
+text.bind("<Return>", ReturnInsert)
+# listbox.bind("<Double-Button-3>", DeleteCurrent)
+# listbox.bind("<Double-Button-1>", CopyToText)
+
+textframe = Frame(root)
+text = Entry(textframe)
+text.pack(side=LEFT,fill=BOTH, expand=1)
+enter_button.pack(side=TOP)
+# remove_button.pack(side=LEFT)
+# save_button.pack(side=LEFT)
+# listbox.pack(side=LEFT,fill=BOTH, expand=1)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+textframe.pack(fill=BOTH, expand=1)
+# listframe.pack(fill=BOTH, expand=1)
+
+try:
+	f = file("notes.db", "rb")
+	notes = pickle.load(f)
+	# for item in notes:
+	# 	# listbox.insert(END,item)
+	# f.close()
+except:
+	pass
+
+root.mainloop()
