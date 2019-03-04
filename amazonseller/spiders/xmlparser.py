@@ -89,8 +89,8 @@ class XmlparserSpider(scrapy.Spider):
         
         # # # # *************** Log in ********************************
         
-        self.driver.find_element_by_id('ap_email').send_keys('orders@americanpersonalizedproducts.com')
-        self.driver.find_element_by_id("ap_password").send_keys('328Sawmill')
+        self.driver.find_element_by_id('ap_email').send_keys('xx@xx.com')
+        self.driver.find_element_by_id("ap_password").send_keys('asdfe')
         form = self.driver.find_element_by_name("signIn")
         form.submit()
         time.sleep(90)
